@@ -22,6 +22,10 @@ struct STUDENT_DATA {
 		firstName = fName;
 		lastName = lName;
 	}
+
+	friend ostream& operator<< (std::ostream& cout, STUDENT_DATA studentData) {
+		return cout << studentData.firstName << " " << studentData.lastName << endl;
+	}
 };
 
 //takes a filename to read from and a vector of student data to write in
@@ -40,13 +44,17 @@ void WriteDataToVector(string filename, vector<STUDENT_DATA>* dataVector) {
 //given a vector of student data, display all of the names
 void DisplayStudents(vector<STUDENT_DATA> dataVector) {
 	for (int i = 0; i < dataVector.size(); i++) {
-		cout << dataVector[i].firstName << ", " << dataVector[i].lastName << endl;
+		cout << dataVector[i];
 	}
 }
 
 int main() {
 	vector<STUDENT_DATA> studentData;
 	WriteDataToVector(FILENAME, &studentData);
+
+	#if _DEBUG
 	DisplayStudents(studentData);
+	#endif
+
 	return 1;
 }
