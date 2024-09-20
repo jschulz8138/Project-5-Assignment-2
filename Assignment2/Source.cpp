@@ -6,55 +6,53 @@
 #include <sstream>
 #include <fstream>
 
-using namespace std;
-
-#define DELIMITER_OFFSET 2
-#define FILENAME "StudentData.txt"
+#define FILE_1 "StudentData.txt"
+#define FILE_2 "StudentData_Emails.txt"
 #define DELIMITER ','
 
-
-//Student Data struct, containing a firstname and last name
+//Student Data struct, containing a firstname, last name, and email
 struct STUDENT_DATA {
-	string firstName;
-	string lastName;
+	std::string firstName;
+	std::string lastName;
+	std::string email;
 
-	STUDENT_DATA(string fName, string lName) {
+	STUDENT_DATA(std::string fName, std::string lName, std::string eMail) {
 		firstName = fName;
 		lastName = lName;
+		email = eMail;
 	}
 
-	friend ostream& operator<< (std::ostream& cout, STUDENT_DATA studentData) {
-		return cout << studentData.firstName << " " << studentData.lastName << endl;
+	STUDENT_DATA(std::string lineData) {
+		std::vector<std::string> splitData;
+		std::stringstream stream(lineData);
+		for (std::string line; getline(stream, line, DELIMITER); )
+			splitData.push_back(line);
+		firstName = splitData[0];
+		lastName = splitData[1];
+		//email = splitData[2];
+	}
+
+	friend std::ostream& operator<< (std::ostream& cout, STUDENT_DATA studentData) {
+		return cout << studentData.firstName << studentData.lastName;
 	}
 };
 
 //takes a filename to read from and a vector of student data to write in
-void WriteDataToVector(string filename, vector<STUDENT_DATA>* dataVector) {
+void WriteDataToVector(std::string filename, std::vector<STUDENT_DATA>* dataVector) {
 	std::ifstream input(filename);
-	for (string line; getline(input, line); )
-	{
-		string firstName = line.substr(line.find(DELIMITER) + DELIMITER_OFFSET, line.length());
-		string lastName = line.substr(0, line.find(DELIMITER));
-		STUDENT_DATA lineStudent(firstName, lastName);
-		dataVector->push_back(lineStudent);
-	}
-	return;
+	for (std::string line; getline(input, line); )
+		dataVector->push_back(STUDENT_DATA(line));
 }
 
 //given a vector of student data, display all of the names
-void DisplayStudents(vector<STUDENT_DATA> dataVector) {
-	for (int i = 0; i < dataVector.size(); i++) {
-		cout << dataVector[i];
-	}
+void DisplayStudents(std::vector<STUDENT_DATA> dataVector) {
+	for (int i = 0; i < dataVector.size(); i++)
+		std::cout << dataVector[i] << std::endl;
 }
 
 int main() {
-	vector<STUDENT_DATA> studentData;
-	WriteDataToVector(FILENAME, &studentData);
-
-	#if _DEBUG
+	std::vector<STUDENT_DATA> studentData;
+	WriteDataToVector(FILE_1, &studentData);
 	DisplayStudents(studentData);
-	#endif
-
 	return 1;
 }
