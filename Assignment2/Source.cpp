@@ -53,6 +53,8 @@ void DisplayStudents(std::vector<STUDENT_DATA> dataVector) {
 int main() {
 	std::vector<STUDENT_DATA> studentData;
 	WriteDataToVector(FILE_1, &studentData);
+#ifdef _DEBUG
 	DisplayStudents(studentData);
+#endif
 	return 1;
 }
