@@ -10,6 +10,9 @@
 #define FILE_2 "StudentData_Emails.txt"
 #define DELIMITER ','
 
+#define PRE_RELEASE
+
+
 //Student Data struct, containing a firstname, last name, and email
 struct STUDENT_DATA {
 	std::string firstName;
@@ -52,9 +55,21 @@ void DisplayStudents(std::vector<STUDENT_DATA> dataVector) {
 
 int main() {
 	std::vector<STUDENT_DATA> studentData;
+#ifdef PRE_RELEASE
+	WriteDataToVector(FILE_2, &studentData);
+#else
 	WriteDataToVector(FILE_1, &studentData);
+#endif
+
 #ifdef _DEBUG
 	DisplayStudents(studentData);
 #endif
+
+#ifdef PRE_RELEASE
+	std::cout << "Application is running PreRelease";
+#else
+	std::cout << "Application is running Release";
+#endif
+
 	return 1;
 }
