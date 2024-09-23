@@ -10,7 +10,7 @@
 #define FILE_2 "StudentData_Emails.txt"
 #define DELIMITER ','
 
-#define PRE_RELEASE
+//#define PRE_RELEASE
 
 
 //Student Data struct, containing a firstname, last name, and email
@@ -32,11 +32,17 @@ struct STUDENT_DATA {
 			splitData.push_back(line);
 		firstName = splitData[0];
 		lastName = splitData[1];
-		//email = splitData[2];
+#ifdef PRE_RELEASE
+		email = splitData[2];
+#endif
 	}
 
 	friend std::ostream& operator<< (std::ostream& cout, STUDENT_DATA studentData) {
+#ifdef PRE_RELEASE
+		return cout << studentData.firstName << studentData.lastName << " " << studentData.email;
+#else
 		return cout << studentData.firstName << studentData.lastName;
+#endif
 	}
 };
 
